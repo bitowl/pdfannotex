@@ -8,19 +8,23 @@ file_regex = re.compile('Input:(.*)')
 line_regex = re.compile('Line:(.*)')
 column_regex = re.compile('Column:(.*)')
 
-def create_mapping(annotations, original):
- 
-    mappings=[]
+
+def find_mapping(annotations, original):
+    mappings = []
     for annotation in annotations:
         try:
-            text = subprocess.check_output(['synctex', 'edit', '-o', str(annotation.page) + ':' + str(annotation.x) + ':' + str(annotation.y) + ':' + original])
+            text = subprocess.check_output(['synctex', 'edit', '-o',
+                                            str(annotation.page) + ':' + str(annotation.x) + ':' +
+                                            str(annotation.y) + ':' + original])
         except subprocess.CalledProcessError:
             sys.exit('No SyncTeX file found?')
-        (file, line, column) = decodeText(text)
+
+        (file, line, column) = parse_synctex_output(text)
         mappings.append(common.Mapping(file, line, column))
     return mappings
 
-def decodeText(text):
+
+def parse_synctex_output(text):
     text = text.decode('utf-8').splitlines()
     for part in text:
         file_match = file_regex.match(part)
@@ -34,11 +38,5 @@ def decodeText(text):
         column_match = column_regex.match(part)
         if column_match:
             column = column_match.group(1)
+            
     return (file, line, column)
-
-def main():
-    print()
-
-if __name__ == "__main__":
-    main()
-

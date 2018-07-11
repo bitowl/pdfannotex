@@ -1,10 +1,11 @@
 #!/usr/bin/env python
 import os
 
+
 def insert_latex_comments(annotations, mappings):
     tuple_list = list(zip(annotations, mappings))
     # sort by file, then by line
-    tuple_list = sorted(tuple_list, key = lambda t: (t[1].file, int(t[1].line)))
+    tuple_list = sorted(tuple_list, key=lambda t: (t[1].file, int(t[1].line)))
 
     created_files = []
     open_file_name = ''
@@ -26,7 +27,6 @@ def insert_latex_comments(annotations, mappings):
             created_files.append(mapping.file)
 
         if current_line == mapping.line:
-            last_line = line
             file_write.write(annotation.get_latex())
             continue
         file_write.write(last_line)
@@ -52,14 +52,8 @@ def finish_writing_file(file_read, file_write, last_line):
         file_read.close()
         file_write.close()
 
+
 def move_files_overriding_originals(created_files):
     for file in created_files:
         os.rename(file + '.anno', file)
-        print('wrote annotations to ' + os.path.normpath(file))
-
-def main():
-    print()
-
-if __name__ == "__main__":
-    main()
-
+        print('Wrote annotations to ' + os.path.normpath(file) + '.')
