@@ -1,5 +1,6 @@
 #!/usr/bin/env python
-from extract_annotations import extract_annotations
+#from extract_poppler import extract_annotations
+from extract_pypdf import extract_annotations
 from find_mapping import find_mapping
 from insert_latex_comments import insert_latex_comments
 import argparse
