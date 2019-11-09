@@ -19,8 +19,8 @@ def insert_latex_comments(annotations, mappings):
             if file_read:
                 finish_writing_file(file_read, file_write, last_line)
             # open file
-            file_read = open(mapping.file, 'r')
-            file_write = open(mapping.file + '.anno', 'w')
+            file_read = open(mapping.file, 'r', encoding='utf-8')
+            file_write = open(mapping.file + '.anno', 'w', encoding='utf-8')
             open_file_name = mapping.file
             current_line = 1
             last_line = file_read.readline()
