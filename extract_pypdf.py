@@ -14,18 +14,16 @@ def extract_annotations(file):
     for i in range(nPages):
         page0 = input1.getPage(i)
         pageHeight = page0['/MediaBox'][3]
-        print('page: ' + str(pageHeight))
         try:
             for iAnnot in page0['/Annots']:
                 annot = iAnnot.getObject()
-
                 if annot['/Subtype'] == '/Link':
                     # Ignore links that are created by LaTeX
                     continue
                 elif annot['/Subtype'] == '/Popup':
                     # Popups are usually handled at the corresponding highlight
                     continue
-                elif annot['/Subtype'] == '/Text' or annot['/Subtype'] == '/Highlight':
+                elif annot['/Subtype'] == '/Text' or annot['/Subtype'] == '/Highlight' or annot['/Subtype'] == '/StrikeOut' or annot['/Subtype'] == '/Underline' or annot['/Subtype'] == '/Squiggly':
                     x = annot['/Rect'][0]
                     y = pageHeight - annot['/Rect'][3]
                     if '/Contents' in annot:
