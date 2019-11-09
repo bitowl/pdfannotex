@@ -3,6 +3,7 @@ import subprocess
 import common
 import sys
 import re
+import os
 
 file_regex = re.compile('Input:(.*)')
 line_regex = re.compile('Line:(.*)')
@@ -20,6 +21,9 @@ def find_mapping(annotations, original):
             sys.exit('No SyncTeX file found?')
 
         (file, line, column) = parse_synctex_output(text)
+        # get relative part of path and then move it relative to the directory the original file is in
+        file = os.path.dirname(original) + file.split('.', 1)[1]
+
         mappings.append(common.Mapping(file, line, column))
     return mappings
 
@@ -38,5 +42,5 @@ def parse_synctex_output(text):
         column_match = column_regex.match(part)
         if column_match:
             column = column_match.group(1)
-            
+
     return (file, line, column)
