@@ -23,7 +23,10 @@ def extract_annotations(file):
                 elif annot['/Subtype'] == '/Popup':
                     # Popups are usually handled at the corresponding highlight
                     continue
-                elif annot['/Subtype'] == '/Text' or annot['/Subtype'] == '/Highlight' or annot['/Subtype'] == '/StrikeOut' or annot['/Subtype'] == '/Underline' or annot['/Subtype'] == '/Squiggly':
+                elif annot['/Subtype'] in ['/Line', '/Ink']:
+                    # Don't parse graphical annotations
+                    continue
+                elif annot['/Subtype'] in ['/Text', '/Highlight', '/StrikeOut', '/Underline', '/Squiggly', '/Caret', '/FreeText']:
                     x = annot['/Rect'][0]
                     y = pageHeight - annot['/Rect'][3]
                     if '/Contents' in annot:
