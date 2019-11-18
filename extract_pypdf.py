@@ -31,10 +31,20 @@ def extract_annotations(file):
                     y = pageHeight - annot['/Rect'][3]
                     if '/Contents' in annot:
                         text = annot['/Contents']
+
+                        # Handle non utf-8 strings gracefully
+                        if (isinstance(text, PyPDF2.generic.ByteStringObject)):
+                            text = text.decode()
                     else:
                         text = ''
+
+                    if '/T' in annot:
+                        author = annot['/T']
+                    else:
+                        author = 'undefined'
+
                     extracted = common.Annotation(
-                        annot['/T'], text, i + 1, x, y)
+                        author, text, i + 1, x, y)
                     extracted_annotations.append(extracted)
                 else:
                     print('Unknown subtype ' + annot['/Subtype'])
@@ -42,7 +52,7 @@ def extract_annotations(file):
                 # print(annot)
                 # print('')
         except Exception as e:
-            print(e)
+            print('Error: ' + e)
             # there are no annotations on this page
             pass
 
