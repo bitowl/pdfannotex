@@ -19,8 +19,9 @@ class Annotation:
     def __repr__(self):
         return self.text + '(' + str(self.page) + ':' + str(self.x) + ',' + str(self.y) + ')'
 
-    def get_latex(self):
-        return '% Annotation from ' + self.author + ': ' + self.text + '\n'
+    def get_latex_comment(self, prefix_format='Annotation from {author}: {text}'):
+        text = prefix_format.format(author=self.author, text=self.text)
+        return '% ' + '% '.join(text.splitlines(True)) + '\n'
 
 
 class Mapping:

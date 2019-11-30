@@ -27,7 +27,7 @@ def insert_latex_comments(annotations, mappings):
             created_files.append(mapping.file)
 
         if current_line == mapping.line:
-            file_write.write(annotation.get_latex())
+            file_write.write(annotation.get_latex_comment())
             continue
         file_write.write(last_line)
 
@@ -35,7 +35,7 @@ def insert_latex_comments(annotations, mappings):
             current_line += 1
             if current_line == mapping.line:
                 last_line = line
-                file_write.write(annotation.get_latex())
+                file_write.write(annotation.get_latex_comment())
                 break
             file_write.write(line)
 
