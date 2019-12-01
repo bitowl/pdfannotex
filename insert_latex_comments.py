@@ -2,7 +2,7 @@
 import os
 
 
-def insert_latex_comments(annotations, mappings):
+def insert_latex_comments(annotations, mappings, comment_prefix):
     tuple_list = list(zip(annotations, mappings))
     # sort by file, then by line
     tuple_list = sorted(tuple_list, key=lambda t: (t[1].file, int(t[1].line)))
@@ -27,7 +27,7 @@ def insert_latex_comments(annotations, mappings):
             created_files.append(mapping.file)
 
         if current_line == mapping.line:
-            file_write.write(annotation.get_latex_comment())
+            file_write.write(annotation.get_latex_comment(comment_prefix))
             continue
         file_write.write(last_line)
 
@@ -35,7 +35,7 @@ def insert_latex_comments(annotations, mappings):
             current_line += 1
             if current_line == mapping.line:
                 last_line = line
-                file_write.write(annotation.get_latex_comment())
+                file_write.write(annotation.get_latex_comment(comment_prefix))
                 break
             file_write.write(line)
 

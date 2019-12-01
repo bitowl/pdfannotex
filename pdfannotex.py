@@ -12,6 +12,8 @@ def parse_arguments():
     parser.add_argument('file', help='PDF file containing the annotations')
     parser.add_argument('--orig', '-o', metavar='PATH',
                         help='Location of the original output pdf', dest='original')
+    parser.add_argument(
+        '--prefix', help='Prefix for the inserted LaTeX comment', default='Annotation from {author}: {text}')
     return parser.parse_args()
 
 
@@ -25,7 +27,7 @@ def main():
     # start process
     annotations = extract_annotations(args.file)
     mapping = find_mapping(annotations, original)
-    insert_latex_comments(annotations, mapping)
+    insert_latex_comments(annotations, mapping, args.prefix)
 
 
 if __name__ == '__main__':
