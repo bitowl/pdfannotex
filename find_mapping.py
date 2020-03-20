@@ -22,6 +22,8 @@ def find_mapping(annotations, original):
 
         (file, line, column) = parse_synctex_output(text)
         # get relative part of path and then move it relative to the directory the original file is in
+        # This only works when the tex file was compiled using TeXstudio which creates file paths like this path-to-folder/./texfile.tex which allows us to detect the root of this project
+        # Does not work with the LaTeX Workshop plugin for VS Code
         file = os.path.dirname(original) + file.split('.', 1)[1]
 
         mappings.append(common.Mapping(file, line, column))
