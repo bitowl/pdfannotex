@@ -5,6 +5,8 @@ import PyQt5
 import common
 
 
+# Status: Working, if you manage to install poppler on your system
+
 def extract_annotations(file):
     extracted_annotations = []
     doc = Poppler.Document.load(file)

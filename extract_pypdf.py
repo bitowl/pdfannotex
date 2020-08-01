@@ -4,6 +4,8 @@ import PyPDF2
 import traceback
 import common
 
+# Status: Working
+
 
 def extract_annotations(file):
     extracted_annotations = []
