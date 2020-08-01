@@ -27,7 +27,11 @@ def find_mapping(annotations, original):
 
         (file, line, column) = parse_synctex_output(text)
         # get relative part of path and then move it relative to the directory the original file is in
-        file = os.path.dirname(original) + os.path.relpath(file, root_folder)
+        file = ntpath.join(ntpath.dirname(original),
+                           ntpath.relpath(file, root_folder))
+
+        # Use posix path going forward
+        file = file.replace(ntpath.sep, ntpath.altsep)
 
         mappings.append(common.Mapping(file, line, column))
     return mappings
