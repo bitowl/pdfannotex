@@ -4,6 +4,8 @@ import common
 import sys
 import re
 import os
+import gzip
+import ntpath
 
 file_regex = re.compile('Input:(.*)')
 line_regex = re.compile('Line:(.*)')
@@ -11,6 +13,9 @@ column_regex = re.compile('Column:(.*)')
 
 
 def find_mapping(annotations, original):
+
+    root_folder = detect_root_folder(original)
+
     mappings = []
     for annotation in annotations:
         try:
@@ -22,12 +27,23 @@ def find_mapping(annotations, original):
 
         (file, line, column) = parse_synctex_output(text)
         # get relative part of path and then move it relative to the directory the original file is in
-        # This only works when the tex file was compiled using TeXstudio which creates file paths like this path-to-folder/./texfile.tex which allows us to detect the root of this project
-        # Does not work with the LaTeX Workshop plugin for VS Code
-        file = os.path.dirname(original) + file.split('.', 1)[1]
+        file = os.path.dirname(original) + os.path.relpath(file, root_folder)
 
         mappings.append(common.Mapping(file, line, column))
     return mappings
+
+
+def detect_root_folder(original):
+    # Tries to detect the root folder of the LaTeX project by reading the second line of the synctex file
+    with gzip.open(original.replace('.pdf', '.synctex.gz'), 'rt') as f:
+        first = f.readline()
+        second = f.readline()
+        if second.startswith('Input:1:'):
+            # We need to use ntpath here, because we are compiling pdfs on Windows and then use PdfAnnoTeX on a Linux server
+            return ntpath.dirname(second[8:])
+
+    # No root folder found
+    return ''
 
 
 def parse_synctex_output(text):

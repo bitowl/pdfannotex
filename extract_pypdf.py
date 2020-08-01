@@ -27,7 +27,7 @@ def extract_annotations(file):
             elif annot['/Subtype'] == '/Popup':
                 # Popups are usually handled at the corresponding highlight
                 continue
-            elif annot['/Subtype'] in ['/Line', '/Ink']:
+            elif annot['/Subtype'] in ['/Line', '/Ink', '/Stamp']:
                 # Don't parse graphical annotations
                 continue
             elif annot['/Subtype'] in ['/Text', '/Highlight', '/StrikeOut', '/Underline', '/Squiggly', '/Caret', '/FreeText']:
