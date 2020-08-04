@@ -39,6 +39,11 @@ def insert_latex_comments(annotations, mappings, comment_prefix):
                 break
             file_write.write(line)
 
+        if current_line < mapping.line:
+            # This annotation was mapped after the end of the file (can happen at the border of tikz images), so it needs to be added to the end of the file
+            file_write.write(annotation.get_latex_comment(comment_prefix))
+            last_line = ''
+
     finish_writing_file(file_read, file_write, last_line)
     move_files_overriding_originals(created_files)
 
